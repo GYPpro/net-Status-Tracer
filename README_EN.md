@@ -12,7 +12,7 @@ English | [简体中文](README.md)
 
 ## Usage
 
-donwload and run is all your need.
+donwload and run is all your need, with full gcc runtime.
 
 ```bash
 git clone github.com/GYPpro/net-status-tarcer
