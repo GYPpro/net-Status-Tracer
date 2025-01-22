@@ -9,6 +9,8 @@
 #include <chrono>
 #include <thread>
 
+#include <deque>
+
 using namespace std;
 
 // color ANSI code
@@ -60,6 +62,9 @@ int main(int args,char * argv []) {
 	int ttl = 1;
 	if(args >=3 ) ttl = stoi(argv[2]);
 
+	int reclen = 40;
+	if(args >=4 ) reclen = stoi(argv[3]);
+
     int latency = ping(ip, ttl);
 #define now chrono::steady_clock::now
 	using ms = chrono::milliseconds;
@@ -77,6 +82,9 @@ int main(int args,char * argv []) {
 
 	int first_loop_flag = 1;
 
+	deque<int> lst;
+	for(int i = 0;i < reclen;i ++) lst.push_back(0); 
+
 	while(1){
 		if(!first_loop_flag){// thread sleep
 			auto cur_tic = now();
@@ -89,7 +97,7 @@ int main(int args,char * argv []) {
 
 		int latency = ping(ip,ttl);
 //		cin.get();
-		if(!first_loop_flag) cout << KHOME << KUP << DEL << KUP << DEL;
+		if(!first_loop_flag) cout << KHOME << KUP << DEL << KUP << DEL << KUP << DEL;
 	//	cin.get();
 		cout << RESET << "[" << change_statuses[chd_status] << "] ";
 		chd_status ++;
@@ -97,10 +105,18 @@ int main(int args,char * argv []) {
 		if (latency != -1) {
     	    cout << GREEN << "connection is NORMAL" << endl
 				<< RESET << "[info] ping commend ended in " << latency << " ms" << RESET << endl;
-    	} else {
+    		lst.push_back(1);
+		} else {
     	    cout << RED << "Disconnect to internet" << endl
 				<< RESET <<  "[info] ping to " << ip << " time limited exceded" << RESET << endl;
-   		}
+   			lst.push_back(-1);
+		}
+		lst.pop_front();
+		for(auto x:lst){
+			if(x == 0) cout << RESET << "■";
+			if(x == 1) cout << GREEN << "■";
+			if(x == -1)cout << RED   << "■";
+		}cout << endl;
 ///		cin.get();
 		first_loop_flag = 0;
 //		 cout << "总耗时: " << elapsed_time << " ms" << endl;
