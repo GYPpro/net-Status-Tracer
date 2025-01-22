@@ -13,6 +13,19 @@
 
 using namespace std;
 
+#ifdef __linux__
+const string commandRedirect = "2>/dev/null";
+const string historyTic = "■";
+const string REGEX = "time=([0-9]+\\.?[0-9]*) ms";
+const string commandPrefix = "ping -c 1 -W ";
+#elif _WIN32
+const string commandRedirect = "";
+const string historyTic = "=";
+const string REGEX = "=([0-9]*)ms";
+const string commandPrefix = "ping -n 1 -w ";
+#endif
+
+
 // color ANSI code
 const string RESET = "\033[0m";
 const string GREEN = "\033[32m";
@@ -24,11 +37,17 @@ const string KDOWN = "\033[1B";
 const string DEL = "\033[2K";
 const string KHOME = "\r";
 
+// initailize parameters
 
-// Ping 函数，返回延迟（毫秒），如果超时或失败，返回 -1
+const string ini_ip = "1.1.1.1";
+const int ini_ttl = 1;
+const int ini_reclen = 40;
+
+
 int ping(const string &ip, int ttl) {
     stringstream command;
-    command << "ping -c 1 -W " << ttl << " " << ip << " 2>/dev/null";
+    command << commandPrefix << ttl << " " << ip << " " << commandRedirect;
+	// cerr << command.str() << endl;
 
     FILE *pipe = popen(command.str().c_str(), "r");
     if (!pipe) {
@@ -45,8 +64,9 @@ int ping(const string &ip, int ttl) {
     }
     pclose(pipe);
 
-    regex regex_time("time=([0-9]+\\.?[0-9]*) ms");
+    regex regex_time(REGEX);
     smatch match;
+	// cerr << result << endl;
     if (regex_search(result, match, regex_time)) {
         float time_ms = stof(match[1].str());
         return static_cast<int>(time_ms);
@@ -56,14 +76,16 @@ int ping(const string &ip, int ttl) {
 }
 
 int main(int args,char * argv []) {
-    string ip = "8.8.8.8";
+    string ip = ini_ip;
 	if(args >=2 ) ip = string(argv[1]);
 	
-	int ttl = 1;
+	int ttl = ini_ttl;
 	if(args >=3 ) ttl = stoi(argv[2]);
 
-	int reclen = 40;
+	int reclen = ini_reclen;
 	if(args >=4 ) reclen = stoi(argv[3]);
+
+	const int loopTime = 1000 * ttl + 200;
 
     int latency = ping(ip, ttl);
 #define now chrono::steady_clock::now
@@ -89,7 +111,7 @@ int main(int args,char * argv []) {
 		if(!first_loop_flag){// thread sleep
 			auto cur_tic = now();
 			auto elapsed_time = chrono::duration_cast< ms >(cur_tic-start_tic).count();
-			int sleep_time = 1200-(int)elapsed_time;
+			int sleep_time = loopTime-(int)elapsed_time;
 			sleep_time = max(0,sleep_time);
 			this_thread::sleep_for(ms(sleep_time));
 			start_tic = now();
@@ -113,13 +135,12 @@ int main(int args,char * argv []) {
 		}
 		lst.pop_front();
 		for(auto x:lst){
-			if(x == 0) cout << RESET << "■";
-			if(x == 1) cout << GREEN << "■";
-			if(x == -1)cout << RED   << "■";
-		}cout << endl;
+			if(x == 0) cout << RESET << historyTic;
+			if(x == 1) cout << GREEN << historyTic;
+			if(x == -1)cout << RED   << historyTic;
+		}cout << RESET << endl;
 ///		cin.get();
 		first_loop_flag = 0;
-//		 cout << "总耗时: " << elapsed_time << " ms" << endl;
 	}
     return 0;
 }
