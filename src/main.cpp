@@ -14,7 +14,7 @@ const int ini_thread_num = 5;
 
 int main(int args,char * argv []) {
     string ip = ini_ip;
-	if(args >=2 ) ip = string(argv[1]);
+	if(args >=2 ) ip = string(argv[1]); 
 	
 	int ttl = ini_ttl;
 	if(args >=3 ) ttl = stoi(argv[2]);
