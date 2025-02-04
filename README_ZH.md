@@ -5,7 +5,7 @@
 
 作为一个`Ubuntu`选手，自带的`ping`在持续监控网络状态时，输出的信息太多，不够直观。时快时慢的输出也会让人感到不适。
 
-NST 只是把`ping`套了个壳，让它所呈现的信息更能满足**持续地监控网络状态**这一需求。
+NST 只是把`ping`套了个多线程的壳，让它所呈现的信息更能满足**持续地监控网络状态**这一需求。
 
 ![alt text](images/demo.gif)
 
@@ -36,6 +36,6 @@ nst [ip] [timeout per loop] [max hisory length]
 ## 编译
 
 ```bash
-g++ main.cpp -o nst -std=c++2a
+cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 ```
 
