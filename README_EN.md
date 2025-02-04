@@ -8,7 +8,7 @@ English | [简体中文](README.md)
 + Easy to Use
 + ...
 
-![alt text](images\demo.gif)
+![alt text](images/demo.gif)
 
 ## Usage
 

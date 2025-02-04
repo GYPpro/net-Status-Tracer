@@ -7,7 +7,7 @@
 
 NST 只是把`ping`套了个壳，让它所呈现的信息更能满足**持续地监控网络状态**这一需求。
 
-![alt text](images\demo.gif)
+![alt text](images/demo.gif)
 
 实测是比较灵敏的，不过在Windows平台上受限于ping本身的不稳定性，会周期性的报红。
 
