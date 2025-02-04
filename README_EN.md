@@ -8,7 +8,7 @@ English | [简体中文](README.md)
 + Easy to Use
 + ...
 
-![alt text](PixPin_2025-01-23_02-21-45.gif)
+![alt text](images\demo.gif)
 
 ## Usage
 
