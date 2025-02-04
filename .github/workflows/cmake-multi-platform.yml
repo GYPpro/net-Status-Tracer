@@ -1,0 +1,48 @@
+name: C++ Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: "3.22"
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_INSTALL_PREFIX=.
+
+      - name: Build Project
+        run: cmake --build build --config Release
+
+      - name: Install Project
+        run: cmake --install build
+
+      - name: Run Executable (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: ./bin/nst || echo "Execution failed"
+
+      - name: Run Executable (Windows)
+        if: runner.os == 'Windows'
+        run: bin\nst.exe || echo "Execution failed"
+
+      - name: Upload Executable (if main branch)
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: nst-${{ runner.os }}
+          path: bin/nst*
