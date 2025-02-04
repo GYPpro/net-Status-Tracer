@@ -2,9 +2,9 @@ name: C++ Build and Test
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
         run: bin\nst.exe || echo "Execution failed"
 
       - name: Upload Executable (if main branch)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3
         with:
           name: nst-${{ runner.os }}
