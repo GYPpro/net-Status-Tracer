@@ -18,9 +18,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_INSTALL_PREFIX=.
+      - name: Configure CMake (Windows with MinGW)
+        if: runner.os == 'Windows'  # 仅在 Windows 运行
+        run: cmake -G "MinGW Makefiles" -B build -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 
+      - name: Configure CMake (Other OS)
+        if: runner.os != 'Windows'  # 仅在 Linux/macOS 运行
+        run: cmake -B build -DCMAKE_INSTALL_PREFIX=.
       - name: Build Project
         run: cmake --build build --config Release
 
