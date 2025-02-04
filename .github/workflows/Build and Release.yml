@@ -1,0 +1,74 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"  # 只有推送 tag 时才触发（如 v1.0.0）
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Windows 使用 MinGW
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: cmake -G "MinGW Makefiles" -B build -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+
+      # Linux 和 macOS
+      - name: Configure CMake (Other OS)
+        if: runner.os != 'Windows'
+        run: cmake -B build -DCMAKE_INSTALL_PREFIX=.
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      # 确保二进制文件存在
+      - name: List Build Output
+        run: ls -lah build
+
+      # 打包 Windows 可执行文件
+      - name: Package Windows Binary
+        if: runner.os == 'Windows'
+        run: |
+          mkdir release
+          mv build/nst.exe release/nst-windows.exe
+
+      # 打包 Linux/macOS 可执行文件
+      - name: Package Unix Binary
+        if: runner.os != 'Windows'
+        run: |
+          mkdir release
+          mv build/nst release/nst-${{ runner.os }}
+
+      # 上传构建产物（供 Release 步骤使用）
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: nst-${{ runner.os }}
+          path: release/*
+
+  release:
+    needs: build  # 依赖于构建任务
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List Downloaded Files
+        run: ls -R artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          token: ${{ secrets.GITHUB_TOKEN }}
