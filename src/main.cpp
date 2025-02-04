@@ -17,7 +17,7 @@ int main(int args,char * argv []) {
 	if(args >=2 ) ip = string(argv[1]); 
 	
 	int ttl = ini_ttl;
-	if(args >=3 ) ttl = stoi(argv[2]);
+	if(args >=3 ) ttl = stoi(argv[2]); 
 
 	int reclen = ini_reclen;
 	if(args >=4 ) reclen = stoi(argv[3]);
