@@ -63,7 +63,7 @@ int main(int args,char * argv []) {
 		cout << RESET << "[" << change_statuses[chd_status] << "] ";
 		chd_status ++;
 		chd_status %= (change_statuses.size());
-		if (status >= (ini_thread_num >> 1)) {
+		if (status != 0) {
     	    cout <<"[STATUS] " <<  GREEN << "NORMAL" << RESET << "    - Active connections:" << status << "/" << ini_thread_num << endl
 				<< RESET << "[INFO] ping commend ended in " << latency << " ms" << RESET << endl;
     		lst.push_back(status);
@@ -75,7 +75,7 @@ int main(int args,char * argv []) {
 		lst.pop_front();
 		for(auto x:lst){
 			if(x == 0) cout << RESET << historyTic;
-			else if(x == ini_thread_num) cout << GREEN << historyTic;
+			else if(x >= 0.6*ini_thread_num ) cout << GREEN << historyTic;
 			else if(x > 0) cout << YELLOW << historyTic;
 			else if(x == -1)cout << RED   << historyTic;
 		}cout << RESET << endl;
