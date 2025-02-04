@@ -30,10 +30,6 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      # 确保二进制文件存在
-      - name: List Build Output
-        run: ls -lah build
-
       # 打包 Windows 可执行文件
       - name: Package Windows Binary
         if: runner.os == 'Windows'
