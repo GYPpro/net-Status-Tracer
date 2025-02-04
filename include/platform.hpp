@@ -1,4 +1,4 @@
-#include<..\include\headers.hpp>
+#include"../include/headers.hpp"
 #pragma once
 
 #ifdef __linux__

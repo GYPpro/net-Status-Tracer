@@ -1,7 +1,7 @@
-#include <..\include\headers.hpp>
-#include <..\include\platform.hpp>
-#include <..\include\ANSI.hpp>
-#include <..\include\ping_test.hpp>
+#include "../include/headers.hpp"
+#include "../include/platform.hpp"
+#include "../include/ANSI.hpp"
+#include "../include/ping_test.hpp"
 
 using namespace std;
 // initailize parameters
@@ -9,7 +9,7 @@ using namespace std;
 const string ini_ip = "1.1.1.1";
 const int ini_ttl = 1;
 const int ini_reclen = 40;
-const int ini_thread_num = 3;
+const int ini_thread_num = 5;
 
 
 int main(int args,char * argv []) {
@@ -24,7 +24,7 @@ int main(int args,char * argv []) {
 
 	const int loopTime = 1000 * ttl + 200;
 
-    auto [status,latency] = ping(ip, ttl);
+    auto [status,latency] = ping(ip, ttl,ini_thread_num);
 	// #define now chrono::steady_clock::now
 	using clock = chrono::steady_clock;
 	using ms = chrono::milliseconds;
@@ -56,20 +56,20 @@ int main(int args,char * argv []) {
 			start_tic = clock::now();
 		}
 
-		auto [status,latency] = ping(ip,ttl);  
+		auto [status,latency] = ping(ip,ttl,ini_thread_num);  
 //		cin.get();
 		if(!first_loop_flag) cout << KHOME << KUP << KDEL << KUP << KDEL << KUP << KDEL;
 	//	cin.get();
 		cout << RESET << "[" << change_statuses[chd_status] << "] ";
 		chd_status ++;
 		chd_status %= (change_statuses.size());
-		if (latency != -1) {
-    	    cout <<"[status] " <<  GREEN << "NORMAL " << RESET << "   connected " << status << "/" << ini_thread_num << endl
-				<< RESET << "[info] ping commend ended in " << latency << " ms" << RESET << endl;
+		if (status >= (ini_thread_num >> 1)) {
+    	    cout <<"[STATUS] " <<  GREEN << "NORMAL" << RESET << "    - Active connections:" << status << "/" << ini_thread_num << endl
+				<< RESET << "[INFO] ping commend ended in " << latency << " ms" << RESET << endl;
     		lst.push_back(status);
 		} else {
-    	    cout <<"[status] " <<  RED << "ABORTED" << RESET << "   connected " << status << "/" << ini_thread_num << endl
-				<< RESET <<  "[info] ping to " << ip << " time limited exceded" << RESET << endl;
+    	    cout <<"[STATUS] " <<  RED << "FAILED" << RESET << "    - Active connections:" << status << "/" << ini_thread_num << endl
+				<< RESET <<  "[INFO] ping to " << ip << " timed out" << RESET << endl;
    			lst.push_back(-1);
 		}
 		lst.pop_front();

@@ -1,6 +1,6 @@
-#include<..\include\headers.hpp>
-#include<..\include\platform.hpp>
-#include<..\include\ANSI.hpp>
+#include "../include/headers.hpp"
+#include "../include/platform.hpp"
+#include "../include/ANSI.hpp"
 #pragma once
 
 int ping_once(std::string ip, int ttl) {
