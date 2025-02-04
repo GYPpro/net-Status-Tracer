@@ -18,11 +18,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up CMake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: "3.22"
-
       - name: Configure CMake
         run: cmake -B build -DCMAKE_INSTALL_PREFIX=.
 
@@ -32,15 +27,7 @@ jobs:
       - name: Install Project
         run: cmake --install build
 
-      - name: Run Executable (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: ./bin/nst || echo "Execution failed"
-
-      - name: Run Executable (Windows)
-        if: runner.os == 'Windows'
-        run: bin\nst.exe || echo "Execution failed"
-
-      - name: Upload Executable (if main branch)
+      - name: Upload Executable (if master branch)
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
