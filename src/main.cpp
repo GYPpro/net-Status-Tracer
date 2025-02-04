@@ -66,7 +66,7 @@ int main(int args,char * argv []) {
 		if (latency != -1) {
     	    cout <<"[status] " <<  GREEN << "NORMAL " << RESET << "   connected " << status << "/" << ini_thread_num << endl
 				<< RESET << "[info] ping commend ended in " << latency << " ms" << RESET << endl;
-    		lst.push_back(1);
+    		lst.push_back(status);
 		} else {
     	    cout <<"[status] " <<  RED << "ABORTED" << RESET << "   connected " << status << "/" << ini_thread_num << endl
 				<< RESET <<  "[info] ping to " << ip << " time limited exceded" << RESET << endl;
@@ -75,8 +75,9 @@ int main(int args,char * argv []) {
 		lst.pop_front();
 		for(auto x:lst){
 			if(x == 0) cout << RESET << historyTic;
-			if(x == 1) cout << GREEN << historyTic;
-			if(x == -1)cout << RED   << historyTic;
+			else if(x == ini_thread_num) cout << GREEN << historyTic;
+			else if(x > 0) cout << YELLOW << historyTic;
+			else if(x == -1)cout << RED   << historyTic;
 		}cout << RESET << endl;
 ///		cin.get();
 		first_loop_flag = 0;
