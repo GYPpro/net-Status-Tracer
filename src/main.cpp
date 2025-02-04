@@ -8,7 +8,7 @@ using namespace std;
 
 const string ini_ip = "1.1.1.1";
 const int ini_ttl = 1;
-const int ini_reclen = 40;
+const int ini_reclen = 40; 
 const int ini_thread_num = 5;
 
 
