@@ -9,11 +9,9 @@ NST 只是把`ping`套了个多线程的壳，让它所呈现的信息更能满�
 
 ![alt text](images/demo.gif)
 
-实测是比较灵敏的，不过在Windows平台上受限于ping本身的不稳定性，会周期性的报红。
-
 ## 使用方法
 
-下载并运行即可，需要完整的gcc运行库。
+下载并运行即可。
 
 ```bash
 git clone github.com/GYPpro/net-status-tarcer
@@ -29,10 +27,10 @@ nst [ip] [timeout per loop] [max hisory length]
 ```
 
 默认：
-+ `ip`是`1.1.1.1`
++ `ip`是`8.8.8.8`
 + 每次循环的超时时间是`1s`
 + 历史记录的最大长度是`40`
-
+   
 ## 编译
 
 ```bash

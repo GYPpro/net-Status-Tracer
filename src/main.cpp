@@ -6,7 +6,7 @@
 using namespace std;
 // initailize parameters
 
-const string ini_ip = "1.1.1.1";
+const string ini_ip = "8.8.8.8";
 const int ini_ttl = 1; 
 const int ini_reclen = 40; 
 const int ini_thread_num = 5;
@@ -24,7 +24,7 @@ int main(int args,char * argv []) {
 
 	const int loopTime = 1000 * ttl + 200;
 
-    auto [status,latency] = ping(ip, ttl,ini_thread_num);
+    // auto [status,latency] = ping(ip, ttl,ini_thread_num);
 	// #define now chrono::steady_clock::now
 	using clock = chrono::steady_clock;
 	using ms = chrono::milliseconds;
@@ -47,6 +47,9 @@ int main(int args,char * argv []) {
 
 	// Main loop
 	while(1){
+ 		auto [status,latency] = ping(ip,ttl,ini_thread_num);
+
+
 		if(!first_loop_flag){// thread sleep
 			auto cur_tic = clock::now();
 			auto elapsed_time = chrono::duration_cast< ms >(cur_tic-start_tic).count();
@@ -54,10 +57,7 @@ int main(int args,char * argv []) {
 			sleep_time = max(0,sleep_time);
 			this_thread::sleep_for(ms(sleep_time));
 			start_tic = clock::now();
-		}
-
-		auto [status,latency] = ping(ip,ttl,ini_thread_num);  
-//		cin.get();
+		}//		cin.get();
 #ifndef __IF_LOG__
 		if(!first_loop_flag) cout << KHOME << KUP << KDEL << KUP << KDEL << KUP << KDEL;
 #endif
@@ -67,7 +67,7 @@ int main(int args,char * argv []) {
 		chd_status %= (change_statuses.size());
 		if (status != 0) {
     	    cout <<"[STATUS] " <<  GREEN << "NORMAL" << RESET << "    - Active connections:" << status << "/" << ini_thread_num << endl
-				<< RESET << "[INFO] ping commend ended in " << latency << " ms" << RESET << endl;
+				<< RESET <<  "[INFO] ping to " << ip << " avg latency: " << latency << "ms" << RESET << endl;
     		lst.push_back(status);
 		} else {
     	    cout <<"[STATUS] " <<  RED << "FAILED" << RESET << "    - Active connections:" << status << "/" << ini_thread_num << endl
