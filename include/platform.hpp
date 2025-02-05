@@ -1,6 +1,8 @@
 #include"../include/headers.hpp"
 #pragma once
 
+// #define __IF_LOG__
+
 #ifdef __linux__
 const string commandRedirect = "2>/dev/null";
 const string historyTic = "■";

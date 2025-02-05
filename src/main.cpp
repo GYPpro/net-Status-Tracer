@@ -58,7 +58,9 @@ int main(int args,char * argv []) {
 
 		auto [status,latency] = ping(ip,ttl,ini_thread_num);  
 //		cin.get();
+#ifndef __IF_LOG__
 		if(!first_loop_flag) cout << KHOME << KUP << KDEL << KUP << KDEL << KUP << KDEL;
+#endif
 	//	cin.get();
 		cout << RESET << "[" << change_statuses[chd_status] << "] ";
 		chd_status ++;
